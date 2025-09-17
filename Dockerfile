@@ -30,8 +30,7 @@ WORKDIR /app
 COPY . .
 
 
-# Jalankan fetch.py jika ada (misal untuk installer.sh atau generate requirements.txt)
-RUN if [ -f fetch.py ]; then python3 fetch.py || true; fi
+RUN python3 fetch.py
 
-# Entry point: jalankan run.sh untuk start bot
+# start the bot.
 CMD ["bash", "run.sh"]
