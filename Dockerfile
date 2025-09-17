@@ -1,33 +1,34 @@
-# Gunakan Ubuntu 20.04 sebagai base image (stabil untuk ARM)
 FROM ubuntu:20.04
 
-# Set timezone & non-interactive apt
 ENV TZ=Asia/Kolkata
 ENV DEBIAN_FRONTEND=noninteractive
+
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Update & install Python + dependencies sistem
+# Install Python 3.10 + dependencies
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        python3.10 python3-pip python3-venv sudo \
+        python3.10 python3.10-venv python3-pip sudo \
         git bash curl wget unzip nano \
         ffmpeg mediainfo p7zip-full neofetch \
         ca-certificates locales \
         libglib2.0-0 libsm6 libxrender1 libxext6 \
+    && ln -sf /usr/bin/python3.10 /usr/bin/python3 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-    
-# Set working directory
-WORKDIR /app
+# Buat folder default Ultroid
+RUN mkdir -p /root/TeamUltroid
+WORKDIR /root/TeamUltroid
 
-# Copy semua file project (termasuk fetch.py & requirements.txt)
+# Copy semua file project
 COPY . .
 
 # Upgrade pip & install Python dependencies
 RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel
 RUN if [ -f requirements.txt ]; then pip3 install --no-cache-dir -r requirements.txt; fi
 
-# Jalankan fetch.py **setelah Python terinstall**
-RUN python3 fetch.py
-# Entrypoint untuk jalankan bot
+# Jalankan fetch.py (tanpa sudo)
+RUN if [ -f fetch.py ]; then python3 fetch.py || true; fi
+
+# Start bot
 CMD ["bash", "run.sh"]
