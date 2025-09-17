@@ -25,8 +25,7 @@ COPY . .
 RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel
 RUN if [ -f requirements.txt ]; then pip3 install --no-cache-dir -r requirements.txt; fi
 
-# Jalankan fetch.py (tanpa sudo)
-RUN if [ -f fetch.py ]; then python3 fetch.py || true; fi
+RUN python3 fetch.py
 
 # Start bot
 CMD ["bash", "run.sh"]
