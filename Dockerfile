@@ -1,5 +1,5 @@
 # Base image: Python terbaru berbasis Debian/Ubuntu
-FROM python:3.10-slim
+FROM ubuntu:20.04
 
 # Set timezone
 ENV TZ=Asia/Kolkata
