@@ -5,11 +5,9 @@ ENV TZ=Asia/Kolkata
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # install dependencies
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
-    ffmpeg \
-    mediainfo \
-    p7zip-full \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git bash curl ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
 # copy project
 COPY . .
