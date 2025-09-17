@@ -1,19 +1,37 @@
-FROM python:3.13-slim
+# Base image: Python terbaru berbasis Debian/Ubuntu
+FROM python:3.10-slim
 
-# set timezone
+# Set timezone
 ENV TZ=Asia/Kolkata
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# install dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git bash curl ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+# Non-interactive mode untuk apt
+ENV DEBIAN_FRONTEND=noninteractive
 
-# copy project
+# Update & install sistem dependencies
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+        bash \
+        git \
+        curl \
+        wget \
+        unzip \
+        nano \
+        ffmpeg \
+        mediainfo \
+        p7zip-full \
+        neofetch \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy semua file project
 COPY . .
 
-# jalankan fetch.py (setup awal)
-RUN python3 fetch.py
 
-# start the bot
+# Jalankan fetch.py jika ada (misal untuk installer.sh atau generate requirements.txt)
+RUN if [ -f fetch.py ]; then python3 fetch.py || true; fi
+
+# Entry point: jalankan run.sh untuk start bot
 CMD ["bash", "run.sh"]
