@@ -9,13 +9,14 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Update & install Python + dependencies sistem
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        python3 python3-pip python3-venv \
-        bash git curl wget unzip nano \
+        python3.10 python3-pip python3-venv sudo \
+        git bash curl wget unzip nano \
         ffmpeg mediainfo p7zip-full neofetch \
         ca-certificates locales \
         libglib2.0-0 libsm6 libxrender1 libxext6 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+    
 # Set working directory
 WORKDIR /app
 
