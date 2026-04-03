@@ -4,8 +4,7 @@ FROM python:3.11-slim
 ENV TZ=Asia/Kolkata
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -y \
-    pip install --upgrade pip \
+RUN apt-get update && apt-get install -y && pip install --upgrade pip \
     ffmpeg \
     mediainfo \
     p7zip-full \
